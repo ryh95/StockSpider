@@ -17,9 +17,7 @@ class novSpider(RedisSpider):
         selector = Selector(response)
         content_field = selector.xpath('//div[@id="articlelistnew"]/div[starts-with(@class,"articleh")]')
         for each in content_field:
-            # bookName = each.xpath('tr/td[@colspan="3"]/center/h2/text()').extract()[0]
             read = each.xpath('span[1]/text()').extract()[0]
-            # content = each.xpath('tr/td/a/text()').extract()
             comment = each.xpath('span[2]/text()').extract()[0]
             title = each.xpath('span[3]/a/text()').extract()[0]
             author = each.xpath('span[4]/a/text()').extract()[0]
@@ -36,6 +34,14 @@ class novSpider(RedisSpider):
             item['date'] = date
             item['last'] = last
             yield Request(Url, callback='parseContent', meta={'item':item})
+        info = selector.xpath('//*[@id="articlelistnew"]/div[@class="pager"]/span/@data-pager').extract()[0]
+        List = info.split('|')
+        # 定义需要抓取多少页
+        if int(List[3])<8:
+            # 生成页面链接
+            nextLink = 'http://guba.eastmoney.com/list,' + '000555' + ',5_' + str(int(List[3])+1) + '.html'
+        # 抓取页面并且处理
+        yield Request(nextLink,callback=self.parse)
 
     def parseContent(self, response):
         selector = Selector(response)
