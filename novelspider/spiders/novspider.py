@@ -10,7 +10,7 @@ class novSpider(RedisSpider):
     name = "novspider"
     redis_key = 'nvospider:start_urls'
     stockCode = '000555'
-    start_urls = ['http://guba.eastmoney.com/list,' + stockCode + ',5_' + str(1) + '.html'
+    start_urls = ['http://guba.eastmoney.com/list,' + stockCode + ',5_' + str(2) + '.html'
                   ]
 
     def parse(self,response):
@@ -36,6 +36,10 @@ class novSpider(RedisSpider):
             item['date'] = date
             item['last'] = last
             yield Request(Url, callback='parseContent', meta={'item':item})
+        nextLink = selector.xpath('//div[@id="articlelistnew"]/div[@class="pager"]/span/@data-pager')
+        # nextLink = selector.xpath('//*[@id="articlelistnew"]/div[82]/span/span/a[4]')
+        print nextLink
+
 
     def parseContent(self, response):
         selector = Selector(response)
