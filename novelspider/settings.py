@@ -7,8 +7,8 @@
 #
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #
-from novelspider.spiders.novspider import STOCKCODES
-BOT_NAME = 'novelspider'
+
+BOT_NAME = ['novelspider','newsspider']
 
 SPIDER_MODULES = ['novelspider.spiders']
 NEWSPIDER_MODULE = 'novelspider.spiders'
@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = 'novelspider.spiders'
 ITEM_PIPELINES = ['novelspider.pipelines.NovelspiderPipeline']
 
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.54 Safari/536.5'
-COOKIES_ENABLED = True
+COOKIES_ENABLED = False
 
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 SCHEDULER_PERSIST = True
@@ -28,5 +28,4 @@ REDIS_PORT = 6379
 MONGODB_HOST = '127.0.0.1'
 MONGODB_PORT = 27017
 
-
-MONGODB_DOCNAME = 'GuYouHui'
+COMMANDS_MODULE = 'novelspider.commands'

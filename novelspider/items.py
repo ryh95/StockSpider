@@ -18,3 +18,13 @@ class NovelspiderItem(Item):
     last = Field()
     text = Field()
     stockCode = Field()
+
+class NewsspiderItem(Item):
+    read = Field()
+    comment = Field()
+    title = Field()
+    author = Field()
+    date = Field()
+    last = Field()
+    text = Field()
+    stockCode = Field()

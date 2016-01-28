@@ -16,7 +16,12 @@ class NovelspiderPipeline(object):
         client = pymongo.MongoClient(host=host, port=port)
         dbName = item['stockCode']
         tdb = client[dbName]
-        self.post = tdb[settings['MONGODB_DOCNAME']]
+
+        if spider.name == 'novspider':
+            self.post = tdb['GuYouHui']
+        elif(spider.name == 'newsspider'):
+            self.post = tdb['XinWen']
+
         bookInfo = dict(item)
         self.post.insert(bookInfo)
         return item
