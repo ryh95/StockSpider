@@ -3,18 +3,18 @@ from lxml import etree
 from scrapy_redis.spiders import RedisSpider
 from scrapy.selector import Selector
 from scrapy.http import Request
-from novelspider.items import NovelspiderItem
+from novelspider.items import NewsspiderItem
 import re
 from novelspider.stockcodes import STOCKCODES
 
-class novSpider(RedisSpider):
+class newsSpider(RedisSpider):
 
-    name = "novspider"
-    redis_key = 'nvospider:start_urls'
+    name = "newsspider"
+    redis_key = 'newsspider:start_urls'
 
     start_urls = []
     for stockCode in STOCKCODES:
-        url =  'http://guba.eastmoney.com/list,' + stockCode + ',5_' + '1.html'
+        url =  'http://guba.eastmoney.com/list,' + stockCode + ',1,f_' + '1.html'
         start_urls.append(url)
 
     def parse(self,response):
@@ -37,7 +37,7 @@ class novSpider(RedisSpider):
             address = each.xpath('span[3]/a/@href').extract()[0]
             baseUrl = 'http://guba.eastmoney.com'
             Url = baseUrl+address
-            item = NovelspiderItem()
+            item = NewsspiderItem()
             item['read'] = read
             item['comment'] = comment
             item['title'] = title
@@ -53,7 +53,7 @@ class novSpider(RedisSpider):
         for stockCode in STOCKCODES:
             if int(List[2])*int(List[3])<int(List[1]):
                 # 生成页面链接
-                nextLink = 'http://guba.eastmoney.com/list,' + stockCode + ',5_' + str(int(List[3])+1) + '.html'
+                nextLink = 'http://guba.eastmoney.com/list,' + stockCode + ',1,f_' + str(int(List[3])+1) + '.html'
                 # 抓取页面并且处理
                 yield Request(nextLink,callback=self.parse)
 
