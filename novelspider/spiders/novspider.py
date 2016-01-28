@@ -5,23 +5,33 @@ from scrapy.selector import Selector
 from scrapy.http import Request
 from novelspider.items import NovelspiderItem
 import re
-STOCKCODE = '000666'
+
 class novSpider(RedisSpider):
+    STOCKCODE = '000669'
+    STOCKCODES = []
     name = "novspider"
     redis_key = 'nvospider:start_urls'
-    global STOCKCODE
-    # for content in STOCKCODE:
-    #     start_urls =
-    start_urls = ['http://guba.eastmoney.com/list,' + STOCKCODE + ',5_' + '1.html'
-                  ]
+
+    global STOCKCODES
+
+    for x in range(3):
+        i = '000'+str(int(STOCKCODE)+x)
+        STOCKCODES.append(i)
+
+    start_urls = []
+    for stockCode in STOCKCODES:
+        url =  'http://guba.eastmoney.com/list,' + stockCode + ',5_' + '1.html'
+        start_urls.append(url)
 
     def parse(self,response):
         selector = Selector(response)
         content_field = selector.xpath('//div[@id="articlelistnew"]/div[starts-with(@class,"articleh")]')
+        stockCode = selector.xpath('//div[@id="stockheader"]/span/span/@data-popstock').extract()[0]
         for each in content_field:
             read = each.xpath('span[1]/text()').extract()[0]
             comment = each.xpath('span[2]/text()').extract()[0]
             title = each.xpath('span[3]/a/text()').extract()[0]
+
             # author容易因为结构出现异常
             if each.xpath('span[4]/a/text()'):
                 author = each.xpath('span[4]/a/text()').extract()[0]
@@ -40,16 +50,18 @@ class novSpider(RedisSpider):
             item['author'] = author
             item['date'] = date
             item['last'] = last
+            item['stockCode'] = stockCode
             yield Request(Url, callback='parseContent', meta={'item':item})
 
         info = selector.xpath('//*[@id="articlelistnew"]/div[@class="pager"]/span/@data-pager').extract()[0]
         List = info.split('|')
         # 定义需要抓取多少页
-        if int(List[2])*int(List[3])<int(List[1]):
-            # 生成页面链接
-            nextLink = 'http://guba.eastmoney.com/list,' + STOCKCODE + ',5_' + str(int(List[3])+1) + '.html'
-            # 抓取页面并且处理
-            yield Request(nextLink,callback=self.parse)
+        for stockCode in STOCKCODES:
+            if int(List[2])*int(List[3])<int(List[1]):
+                # 生成页面链接
+                nextLink = 'http://guba.eastmoney.com/list,' + stockCode + ',5_' + str(int(List[3])+1) + '.html'
+                # 抓取页面并且处理
+                yield Request(nextLink,callback=self.parse)
 
 
 

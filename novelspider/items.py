@@ -10,13 +10,6 @@ from scrapy import Field, Item
 
 class NovelspiderItem(Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    # bookName = Field()
-    # bookTitle = Field()
-    # chapterNum = Field()
-    # chapterName = Field()
-    # chapterURL = Field()
-    # text = Field()
     read = Field()
     comment = Field()
     title = Field()
@@ -24,3 +17,4 @@ class NovelspiderItem(Item):
     date = Field()
     last = Field()
     text = Field()
+    stockCode = Field()

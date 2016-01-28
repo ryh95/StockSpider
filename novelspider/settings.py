@@ -7,7 +7,7 @@
 #
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #
-
+from novelspider.spiders.novspider import STOCKCODES
 BOT_NAME = 'novelspider'
 
 SPIDER_MODULES = ['novelspider.spiders']
@@ -27,5 +27,6 @@ REDIS_PORT = 6379
 
 MONGODB_HOST = '127.0.0.1'
 MONGODB_PORT = 27017
-MONGODB_DBNAME = '000666'
+
+
 MONGODB_DOCNAME = 'GuYouHui'
