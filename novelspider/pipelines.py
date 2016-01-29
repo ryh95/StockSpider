@@ -21,6 +21,10 @@ class NovelspiderPipeline(object):
             self.post = tdb['GuYouHui']
         elif(spider.name == 'newsspider'):
             self.post = tdb['XinWen']
+        elif(spider.name == 'researchspider'):
+            self.post = tdb['YanBao']
+        elif(spider.name == 'publicspider'):
+            self.post = tdb['GongGao']
 
         bookInfo = dict(item)
         self.post.insert(bookInfo)

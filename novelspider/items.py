@@ -28,3 +28,23 @@ class NewsspiderItem(Item):
     last = Field()
     text = Field()
     stockCode = Field()
+
+class ResearchspiderItem(Item):
+    read = Field()
+    comment = Field()
+    title = Field()
+    author = Field()
+    date = Field()
+    last = Field()
+    text = Field()
+    stockCode = Field()
+
+class PublicspiderItem(Item):
+    read = Field()
+    comment = Field()
+    title = Field()
+    author = Field()
+    date = Field()
+    last = Field()
+    text = Field()
+    stockCode = Field()
